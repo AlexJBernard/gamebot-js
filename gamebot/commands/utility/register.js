@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js')
-import { memoryDatabase } from '../../database/database'
+import { database } from '../../database/memoryDatabase.js'
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -8,9 +8,10 @@ module.exports = {
     .addStringOption(opt => {
       return opt.setName("game")
         .setDescription("The name of the added game")
-        .setRequired(true)
+        .setRequired(true);
     }),
   async execute(interaction) {
-
+    const game = interaction.options.getString("game");
+    const { id, user } = interaction.member.user;
   }
 }

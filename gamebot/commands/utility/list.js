@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js')
-import { memoryDatabase } from '../../database/database'
+import { database } from '../../database/memoryDatabase.js'
 
 module.exports = {
   data: new SlashCommandBuilder(),
