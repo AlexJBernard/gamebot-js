@@ -1,4 +1,8 @@
 {
+  "name": "gamebot-js",
+  "version": "0.0.1",
+  "description":"Discord bot for tracking a list of games shared between users",
+  "main": "index.js",
   "dependencies": {
     "discord.js": "^14.18.0"
   }

@@ -28,7 +28,7 @@ const updateGameList = (updatedUserData) => {
 /**
  * 
  */
-export const database = {
+module.exports =  {
   /**
    * Returns the user from the userGameList whose discord id matches its current entries. 
    * Returns undefined if no users are found.

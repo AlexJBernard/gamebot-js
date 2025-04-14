@@ -2,6 +2,12 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const { 
+  clientId, 
+  guildId,
+  token 
+} = require('./config.json');
+
+const { 
   Client, 
   Collection, 
   Events, 

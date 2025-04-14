@@ -1,5 +1,12 @@
 const { SlashCommandBuilder } = require('discord.js')
-import { database } from '../../database/memoryDatabase'
+const database = require('../../database/memoryDatabase')
+
+const addGameToUser = function(userData, game) {
+  return {
+    ...userData, 
+    games: [...userData.games, game]
+  }
+}
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -12,6 +19,17 @@ module.exports = {
     }),
   async execute(interaction) {
     const game = interaction.options.getString("game");
-    const { id, user } = interaction.member.user;
-  }
+    const { id, username } = interaction.member.user;
+    const currentUserData = database.getUser(id)
+    // If the current user is not recorded, create a new userData object
+    const userData = currentUserData ? currentUserData : {
+      id,
+      username,
+      games: []
+    }
+    const updatedUserData = addGameToUser(userData, game)
+    database.saveUser(updatedUserData)
+    console.log(updatedUserData.games)
+    await interaction.reply('Game Successfully Added!');
+  },
 }
