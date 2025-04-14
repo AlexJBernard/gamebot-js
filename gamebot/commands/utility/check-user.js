@@ -1,16 +1,32 @@
-const { SlashCommandBuilder } = require('discord.js')
+const { 
+  SlashCommandBuilder,
+  ChatInputCommandInteraction 
+} = require('discord.js')
 const database = require('../../database/memoryDatabase')
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("check-user")
     .setDescription("Displays the given user's current list of games")
-    .addStringOption(opt => {
-      return opt.setName("username")
-        .setDescription("The desired user's username")
+    .addUserOption(opt => {
+      return opt.setName("user")
+        .setDescription("The user who's list is being checked.")
         .setRequired(true);
     }),
+  /**
+   * 
+   * @param {ChatInputCommandInteraction} interaction 
+   */
   async execute(interaction) {
-    await interaction.reply("COMMAND WORK-IN-PROGRESS")
+    const user = interaction.options.getUser("user")
+    const userData = database.getUser(user.id)
+
+    if (userData) {
+      let responseText = user.username + "\n"
+      responseText += userData.games.toString()
+      await interaction.reply(responseText)
+    } else {
+      await interaction.reply("ERROR: User not registered")
+    }
   }
 }
