@@ -12,8 +12,17 @@ module.exports = {
     }),
   async execute(interaction) {
     const game = interaction.options.getString("game");
-    const games = database.checkGame(game);
-
-    await interaction.reply("Input Received!")
+    const users = database.checkGame(game);
+    console.log(users)
+    if (users.length == 0) {
+      await interaction.reply(`ERROR: No users have been recorded with the following game: ${game}`)
+    } else {
+      let response = `Users with game \"${game}\"`
+      users.map(user => {
+        response += "\n" + user.username
+      })
+  
+      await interaction.reply(response)
+    }
   }
 }

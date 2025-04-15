@@ -48,11 +48,39 @@ module.exports =  {
   },
 
   /**
-   * 
+   * Returns a complete list of users that have the given game listed in their list of games
    * @param {String} game Name of the game being searched for.
+   * @returns {Array<Object>} A list of user objects
    */
   checkGame: function (game) {
-    return userGameList
+
+    return userGameList.filter(user => user.games.indexOf(game) >= 0)
+  },
+
+  /**
+   * Returns an array listing the top 5 most owned games on the current server.
+   */
+  topGames: function() {
+    let topGameMap = new Map();
+    userGameList.map(user => {
+      user.games.map(game => {
+        if (topGameMap.has(game)) {
+          topGameMap.set(game, topGameMap.get(game) + 1)
+        } else {
+          topGameMap.set(game, 1)
+        }
+      })
+    })
+
+    let topGameArray = []
+    topGameMap.forEach((game, num) =>
+      topGameArray.push({
+        name: game,
+        num: num
+      })
+    )
+    topGameArray.sort((a, b) => a.num - b.num)
+    return topGameArray
   }
 
 }

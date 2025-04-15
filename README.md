@@ -12,6 +12,7 @@ A discord bot used for tracking which games are owned by users of the current se
 ## About
 
 ## Installation
+The following project requires node and npm to run.
 
 ## How to Run
 
@@ -23,10 +24,7 @@ Adds the given game to the user's list of games.
 Removes the current game from the user's list of games.
 
 ### /list
-Lists all games registered by the current user.
-
-### /most-owned
-Lists the top 5 games owned by all users of the server
+Lists the top 5 games owned by all users of the server.
 
 ### /check-game [*game-name*]
 Lists how many users own the game with the given title.
@@ -35,5 +33,12 @@ Lists how many users own the game with the given title.
 Lists all games that have been registered by the current user.
 
 ## To-Do List
+- Standardize string inputs
+  - Make letters either uppercase or lowercase
+  - Trim all whitespace with a single '-'
+  - Remove trailing whitespace.
+- Modify to be server agnostic
+- Add project unit tests
+- Add SQL Database
 
 ## Credits

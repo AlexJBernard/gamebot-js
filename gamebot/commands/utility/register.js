@@ -27,9 +27,14 @@ module.exports = {
       username,
       games: []
     }
-    const updatedUserData = addGameToUser(userData, game)
-    database.saveUser(updatedUserData)
-    console.log(updatedUserData.games)
-    await interaction.reply('Game Successfully Added!');
+
+    if (userData.games.indexOf(game) >= 0) {
+      await interaction.reply(`ERROR: User already possess game ${game}`)
+    } else {
+      const updatedUserData = addGameToUser(userData, game)
+      database.saveUser(updatedUserData)
+      console.log(updatedUserData.games)
+      await interaction.reply('Game Successfully Added!');
+    }
   },
 }
