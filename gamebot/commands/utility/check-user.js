@@ -1,6 +1,7 @@
 const { 
   SlashCommandBuilder,
-  ChatInputCommandInteraction 
+  ChatInputCommandInteraction ,
+  MessageFlags
 } = require('discord.js')
 const database = require('../../database/memoryDatabase')
 
@@ -21,12 +22,16 @@ module.exports = {
     const user = interaction.options.getUser("user")
     const userData = database.getUser(user.id)
 
+    let response = "ERROR: User not registered";
+
     if (userData) {
-      let responseText = user.username + "\n"
-      responseText += userData.games.toString()
-      await interaction.reply(responseText)
-    } else {
-      await interaction.reply("ERROR: User not registered")
+      response = user.username + "\n"
+      response += userData.games.toString()
     }
+
+    await interaction.reply({
+      content: response,
+      flags: MessageFlags.Ephemeral
+    })
   }
 }

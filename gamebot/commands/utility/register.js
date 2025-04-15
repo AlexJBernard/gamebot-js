@@ -1,4 +1,7 @@
-const { SlashCommandBuilder } = require('discord.js')
+const { 
+  SlashCommandBuilder,
+  MessageFlags 
+} = require('discord.js')
 const database = require('../../database/memoryDatabase')
 
 const addGameToUser = function(userData, game) {
@@ -28,13 +31,17 @@ module.exports = {
       games: []
     }
 
-    if (userData.games.indexOf(game) >= 0) {
-      await interaction.reply(`ERROR: User already possess game ${game}`)
-    } else {
+    let response = `ERROR: User already possess game ${game}`
+    if (userData.games.indexOf(game) < 0) {
       const updatedUserData = addGameToUser(userData, game)
       database.saveUser(updatedUserData)
       console.log(updatedUserData.games)
-      await interaction.reply('Game Successfully Added!');
+      response = 'Game Successfully Added!'
     }
+
+    await interaction.reply({
+      content: response,
+      flags: MessageFlags.Ephemeral
+    })
   },
 }
