@@ -1,6 +1,7 @@
 const { 
   SlashCommandBuilder,
-  MessageFlags 
+  MessageFlags,
+  ChatInputCommandInteraction
 } = require('discord.js')
 const database = require('../../database/memoryDatabase')
 
@@ -39,6 +40,10 @@ module.exports = {
       response = 'Game Successfully Added!'
     }
 
+    /**
+     * 
+     * @param {ChatInputCommandInteraction} interaction Data within the sent slash command
+     */
     await interaction.reply({
       content: response,
       flags: MessageFlags.Ephemeral

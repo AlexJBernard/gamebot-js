@@ -1,4 +1,8 @@
-const { SlashCommandBuilder } = require('discord.js')
+const { 
+  SlashCommandBuilder, 
+  ChatInputCommandInteraction,
+  MessageFlags
+} = require('discord.js')
 const database = require('../../database/memoryDatabase')
 
 module.exports = {
@@ -10,7 +14,26 @@ module.exports = {
         .setRequired(true)
         .setDescription("Game to be removed.")
     }),
+    
+    /**
+     * 
+     * @param {ChatInputCommandInteraction} interaction Data within the sent slash command
+     */
   async execute(interaction) {
-    await interaction.reply("ERROR: COMMAND WORK-IN-PROGRESS")
+    const game = interaction.options.getString("game");
+    const id = interaction.member.user.id
+    const currentUserData = database.getUser(id)
+    let response = `ERROR: ${game} not found in user's game list`;
+
+    if (currentUserData.games.indexOf(game) >= 0) {
+      const newList = currentUserData.games.filter(gamename => gamename !== game)
+      currentUserData.games = newList
+      response = `Game ${game} removed!`
+    }
+
+    await interaction.reply({
+      content: response,
+      flags: MessageFlags.Ephemeral
+    })
   }
 }

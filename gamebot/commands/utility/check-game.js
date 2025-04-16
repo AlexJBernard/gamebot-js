@@ -1,5 +1,6 @@
 const { 
   SlashCommandBuilder,
+  ChatInputCommandInteraction,
   MessageFlags
 } = require('discord.js')
 const database = require('../../database/memoryDatabase')
@@ -13,6 +14,11 @@ module.exports = {
         .setDescription("The name of the game to look for")
         .setRequired(true);
     }),
+    
+    /**
+     * 
+     * @param {ChatInputCommandInteraction} interaction Data within the sent slash command
+     */
   async execute(interaction) {
     const game = interaction.options.getString("game");
     const users = database.checkGame(game);
