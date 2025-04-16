@@ -1,6 +1,7 @@
 const { 
   SlashCommandBuilder, 
-  ChatInputCommandInteraction
+  ChatInputCommandInteraction,
+  MessageFlags
 } = require('discord.js')
 const database = require('../../database/memoryDatabase')
 
@@ -15,7 +16,17 @@ module.exports = {
    * @param {ChatInputCommandInteraction} interaction Data within the sent slash command
    */
   async execute(interaction) {
-    console.log(database.topGames())
-    await interaction.reply("ERROR: COMMAND WORK-IN-PROGRESS")
+    const topFive = database.topFiveGames()
+    let response = "ERROR: NO REGISTERED GAMES"
+
+    if (topFive.length > 0) {
+      response = "MOST OWNED GAMES:"
+      topFive.forEach(game => response += '\n' + game.name + '\n\tUsers: ' + game.num)
+    }
+
+    await interaction.reply({
+      content: response,
+      flags: MessageFlags.Ephemeral
+    })
   }
 }
