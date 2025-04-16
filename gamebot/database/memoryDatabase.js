@@ -59,13 +59,15 @@ module.exports =  {
 
   /**
    * Returns an array listing the top 5 most owned games on the current server.
+   * @returns {Array} List of games along with the number of users that own them
    */
-  topGames: function() {
+  topFiveGames: function() {
     let topGameMap = new Map();
     userGameList.map(user => {
       user.games.map(game => {
         if (topGameMap.has(game)) {
-          topGameMap.set(game, topGameMap.get(game) + 1)
+          const newVal = topGameMap.get(game) + 1
+          topGameMap.set(game, newVal)
         } else {
           topGameMap.set(game, 1)
         }
@@ -73,14 +75,14 @@ module.exports =  {
     })
 
     let topGameArray = []
-    topGameMap.forEach((game, num) =>
+    topGameMap.forEach((num, game) =>
       topGameArray.push({
         name: game,
         num: num
       })
     )
-    topGameArray.sort((a, b) => a.num - b.num)
-    return topGameArray
+    topGameArray.sort((a, b) => b.num - a.num)
+    return topGameArray.slice(0, 5)
   }
 
 }
