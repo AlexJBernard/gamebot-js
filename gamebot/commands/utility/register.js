@@ -1,4 +1,8 @@
-const { SlashCommandBuilder } = require('discord.js')
+const { 
+  SlashCommandBuilder,
+  MessageFlags,
+  ChatInputCommandInteraction
+} = require('discord.js')
 const database = require('../../database/memoryDatabase')
 
 const addGameToUser = function(userData, game) {
@@ -17,8 +21,19 @@ module.exports = {
         .setDescription("The name of the added game")
         .setRequired(true);
     }),
+
+  /**
+   * 
+   * @param {ChatInputCommandInteraction} interaction Data within the sent slash command
+   */
   async execute(interaction) {
     const game = interaction.options.getString("game");
+
+    // Correct user input 
+    // Trim lead and trailing whitespaces
+    // Set all characters to lowercase
+    // Replace each string of spaces with a single '-'
+    const gameCorrected = game.trim().toLowerCase()
     const { id, username } = interaction.member.user;
     const currentUserData = database.getUser(id)
     // If the current user is not recorded, create a new userData object
@@ -27,9 +42,17 @@ module.exports = {
       username,
       games: []
     }
-    const updatedUserData = addGameToUser(userData, game)
-    database.saveUser(updatedUserData)
-    console.log(updatedUserData.games)
-    await interaction.reply('Game Successfully Added!');
+
+    let response = `ERROR: User already possess game ${game}`
+    if (userData.games.indexOf(game) < 0) {
+      const updatedUserData = addGameToUser(userData, game)
+      database.saveUser(updatedUserData)
+      response = 'Game Successfully Added!'
+    }
+
+    await interaction.reply({
+      content: response,
+      flags: MessageFlags.Ephemeral
+    })
   },
 }
