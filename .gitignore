@@ -1,2 +1,3 @@
 /gamebot/config.json
 /gamebot/node_modules
+/gamebot/database/data/data.json
