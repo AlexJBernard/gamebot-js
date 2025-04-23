@@ -1,20 +1,40 @@
 
 const fs = require('fs');
+const path = require('path');
 const User = require('../class/user')
 
-const fileUrl = './data/data.json';
+const fileUrl = 'data/data.json';
 
 /** 
  * @returns {Array<User>} A list of User class objects
 */
 const getUserList = () => {
-  const readStream = fs.readFileSync(fileUrl);
+  const filePath = path.join(__dirname, fileUrl)
+  const readStream = fs.readFileSync(filePath, 'utf8');
 
-  const data = JSON.parse(readStream);
   /**
-   * @type {Array<User>} a list of 
+   * @type {Array<Object>} A list of objects obtained from the provided json
    */
-  let userData = []
+  const data = JSON.parse(readStream);
+
+  /**
+   * @type {Array<User>} The list of users parsed from the project's json document
+   */
+  let userData = data.map(
+    /**
+     * 
+     * @param {Object} user An object stored in the data.json file
+     * @param {Snowflake} user.id The user's Discord id
+     * @param {String} user.username The user's Discord username
+     * @param {Array<String>} user.games The recorded list of user games
+     * @returns 
+     */
+    (user) => {
+    
+      return new User(user.userId, user.username, user.games)
+    }
+  )
+  console.log(userData)
 
   return userData;
 }
@@ -23,16 +43,18 @@ const getUserList = () => {
  * @param {User} userData
  */
 const updateUserList = (userData) => {
+
+  // List of users
   const userList = getUserList()
+
   /**
    * @type {Array<User.object>}
    */
-  let output = []
-  userList.forEach((user) => {
-    output.push(user.object)
-  })
+  let output = userList.filter((user) => user.userId !== userData.userId)
+  output.push(userData.object)
+  const filePath = path.join(__dirname, fileUrl)
 
-  fs.writeFileSync('./data/data.json', JSON.stringify(output),
+  fs.writeFileSync(filePath, JSON.stringify(output),
     {
       encoding: "utf8",
     }
@@ -52,7 +74,9 @@ module.exports = {
    */
   saveUser: function(userData) {
     updateUserList(userData)
-    return null
+    return {
+      message: "SUCCESS: User Added!"
+    }
   },
 
   /**
@@ -61,12 +85,12 @@ module.exports = {
    * @returns 
    */
   checkGame: function (game) {
-    return null
+    return getUserList().filter(user => user.hasGame(game))
   },
 
   /**
    * @param {Number} num The number of top games to show
-   * @returns {Array<Object>}
+   * @returns {Array<Object>} Returns a list of objects, showing how many users own each game, in descending order
    */
   topGames: function(num) {
     let topGameMap = new Map();

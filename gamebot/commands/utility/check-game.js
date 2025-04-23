@@ -3,7 +3,7 @@ const {
   ChatInputCommandInteraction,
   MessageFlags
 } = require('discord.js')
-const database = require('../../database/memoryDatabase')
+const database = require('../../database/jsonDatabase')
 
 module.exports = {
   data: new SlashCommandBuilder()

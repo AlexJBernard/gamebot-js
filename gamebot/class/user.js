@@ -19,18 +19,6 @@ class User {
   games = [];
 
   /**
-   * 
-   * @param {String} username The username for the given Discord member
-   * @param {Snowflake} userId The userId for the given Discord member
-   * @param {Array} games List of games owned by this user
-   */
-  constructor(username, userId, games) {
-    this.username = username;
-    this.userId = userId;
-    this.games = games;
-  }
-
-  /**
    * @returns  A JSON Serializable object
    */
   get object() {
@@ -44,8 +32,8 @@ class User {
   /**
    * @param {String} game The name of the game being added
    */
-  set addGame(game) {
-    if (this.games.indexOf(game) >= 0) {
+  addGame(game) {
+    if (this.hasGame(game)) {
       return false
     }
     
@@ -57,27 +45,35 @@ class User {
   /**
    * @param {String} game Name of the game being removed
    */
-  set removeGame(game) {
-    if (this.games.indexOf(game) < 0) {
-      return false
+  removeGame(game) {
+    if (this.hasGame(game)) {
+      this.games = this.games.filter((item) => item !== game)
+      return true
     }
 
-    const newList = this.games.filter((item) => {
-      return item === game;
-    })
-    this.games = newList
+    return false
   }
 
   /**
-   * 
-   * @param {String} game 
-   * @returns 
+   * Determines if the current user has the listed game
+   * @param {String} game The name of the game being searched for
+   * @returns True if the desired game exists in the user's list of games
    */
   hasGame(game) {
     return this.games.includes(game)
   }
 
-
+  /**
+   * 
+   * @param {String} username The username for the given Discord member
+   * @param {Snowflake} userId The userId for the given Discord member
+   * @param {Array<String>} games List of games owned by this user
+   */
+  constructor(userId, username, games) {
+    this.userId = userId;
+    this.username = username;
+    this.games = games;
+  }
 }
 
 module.exports = User

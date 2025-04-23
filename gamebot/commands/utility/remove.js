@@ -3,7 +3,9 @@ const {
   ChatInputCommandInteraction,
   MessageFlags
 } = require('discord.js')
-const database = require('../../database/memoryDatabase')
+
+const User = require('../../class/user')
+const database = require('../../database/jsonDatabase')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -25,9 +27,9 @@ module.exports = {
     const currentUserData = database.getUser(id)
     let response = `ERROR: ${game} not found in user's game list`;
 
-    if (currentUserData.games.indexOf(game) >= 0) {
-      const newList = currentUserData.games.filter(gamename => gamename !== game)
-      currentUserData.games = newList
+    if (currentUserData.hasGame(game)) {
+      currentUserData.removeGame(game)
+      database.saveUser(currentUserData)
       response = `Game ${game} removed!`
     }
 

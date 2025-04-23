@@ -3,14 +3,9 @@ const {
   MessageFlags,
   ChatInputCommandInteraction
 } = require('discord.js')
-const database = require('../../database/memoryDatabase')
 
-const addGameToUser = function(userData, game) {
-  return {
-    ...userData, 
-    games: [...userData.games, game]
-  }
-}
+const User = require('../../class/user')
+const database = require('../../database/jsonDatabase')
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -34,19 +29,17 @@ module.exports = {
     // Set all characters to lowercase
     // Replace each string of spaces with a single '-'
     const gameCorrected = game.trim().toLowerCase()
+    
     const { id, username } = interaction.member.user;
     const currentUserData = database.getUser(id)
     // If the current user is not recorded, create a new userData object
-    const userData = currentUserData ? currentUserData : {
-      id,
-      username,
-      games: []
-    }
+    const userData = currentUserData ? currentUserData : new User(id, username, [])
+    console.log(userData)
 
     let response = `ERROR: User already possess game ${game}`
-    if (userData.games.indexOf(game) < 0) {
-      const updatedUserData = addGameToUser(userData, game)
-      database.saveUser(updatedUserData)
+    if (!userData.hasGame(game)) {
+      userData.addGame(game)
+      database.saveUser(userData)
       response = 'Game Successfully Added!'
     }
 
