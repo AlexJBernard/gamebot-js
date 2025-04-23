@@ -22,7 +22,7 @@ const getUserList = () => {
 /**
  * @param {User} userData
  */
-const updateUserList = async (userData) => {
+const updateUserList = (userData) => {
   const userList = getUserList()
   /**
    * @type {Array<User.object>}
@@ -51,6 +51,7 @@ module.exports = {
    * @returns 
    */
   saveUser: function(userData) {
+    updateUserList(userData)
     return null
   },
 
@@ -65,11 +66,30 @@ module.exports = {
 
   /**
    * @param {Number} num The number of top games to show
+   * @returns {Array<Object>}
    */
   topGames: function(num) {
-    let topGameMap = newMap();
-    const userList = getUserList()
+    let topGameMap = new Map();
+    const userList = getUserList();
+    userList.map((user) => {
+      user.games.map(game => {
+        if (topGameMap.has(game)) {
+          const newVal = topGameMap.get(game) + 1
+          topGameMap.set(game, newVal)
+        } else {
+          topGameMap.set(game, 1)
+        }
+      })
+    })
 
-    return null;
+    let topGameArray = []
+    topGameMap.forEach((num, game) =>
+    topGameArray.push({
+      name: game,
+      num: num
+    }))
+
+    topGameArray.sort((a, b) => b.num - a.num)
+    return topGameArray.slice(0, num);
   }
 }
