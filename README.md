@@ -51,8 +51,8 @@ Adds the given game to the user's list of games.
 ### /remove [*game-name*]
 Removes the current game from the user's list of games.
 
-### /list
-Lists the top 5 games owned by all users of the server.
+### /top-games [*number-of-games*]
+Lists the top 'n' games owned by all users of the server. Displays 5 by default
 
 ### /check-game [*game-name*]
 Lists how many users own the game with the given title.
@@ -70,7 +70,6 @@ Lists all games that have been registered by the current user.
   - Make letters either uppercase or lowercase
   - Trim all whitespace with a single '-'
   - Remove trailing whitespace.
-- Modify to be server agnostic (No GuildID)
 
 ## Credits
 Project code for index and deploy-commands was extended from the [DiscordJS guide](https://discordjs.guide/slash-commands/response-methods.html#ephemeral-responses)

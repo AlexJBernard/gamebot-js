@@ -70,7 +70,7 @@ module.exports = {
   /**
    * 
    * @param {User} userData 
-   * @returns 
+   * @returns {Object.String} An object containing the success of the given operation
    */
   saveUser: function(userData) {
     updateUserList(userData)

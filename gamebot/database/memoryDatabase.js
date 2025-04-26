@@ -64,7 +64,7 @@ module.exports =  {
    * Returns an array listing the top 5 most owned games on the current server.
    * @returns {Array} List of games along with the number of users that own them
    */
-  topFiveGames: function() {
+  topGames: function(num) {
     let topGameMap = new Map();
     userGameList.map(user => {
       user.games.map(game => {
@@ -85,7 +85,7 @@ module.exports =  {
       })
     )
     topGameArray.sort((a, b) => b.num - a.num)
-    return topGameArray.slice(0, 5)
+    return topGameArray.slice(0, num)
   }
 
 }
