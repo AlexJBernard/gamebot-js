@@ -1,33 +1,32 @@
 const { 
-  SlashCommandBuilder, 
-  ChatInputCommandInteraction,
+  SlashCommandBuilder,
+  ChatInputCommandInteraction ,
   MessageFlags
 } = require('discord.js')
 const database = require('../../database/jsonDatabase')
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('list')
-    .setDescription("Displays the top games owned by all users of the current server")
-    .addIntegerOption(option => 
-      option 
-        .setName("games")
-        .setDescription("The total number of games to display.\nSet to 5 by default.")
-    ),
-  
+    .setName("list")
+    .setDescription("Displays the given user's current list of games")
+    .addUserOption(opt => {
+      return opt.setName("user")
+        .setDescription("The user who's list is being checked.")
+        .setRequired(false);
+    }),
   /**
    * 
-   * @param {ChatInputCommandInteraction} interaction Data within the sent slash command
+   * @param {ChatInputCommandInteraction} interaction 
    */
   async execute(interaction) {
-    const num = interaction.options.getInteger('games') ?? 5;
+    const user = interaction.options.getUser("user") ?? interaction.member.user;
+    const userData = database.getUser(user.id)
 
-    const list = database.topGames(num)
-    let response = "ERROR: NO REGISTERED GAMES"
+    let response = "ERROR: User not registered";
 
-    if (list.length > 0) {
-      response = "MOST OWNED GAMES:"
-      list.forEach(game => response += '\n' + game.name + '\n\tUsers: ' + game.num)
+    if (userData) {
+      response = user.username + "\n"
+      response += userData.games.toString()
     }
 
     await interaction.reply({

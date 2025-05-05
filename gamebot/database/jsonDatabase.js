@@ -62,6 +62,11 @@ const updateUserList = (userData) => {
 }
 
 module.exports = {
+  /**
+   * 
+   * @param {Snowflake} userId The desired user's unique discord id
+   * @returns 
+   */
   getUser: function (userId) {
     const userList = getUserList()
     return userList.find((user) => user.userId === userId)
