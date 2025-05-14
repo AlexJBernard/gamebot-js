@@ -62,14 +62,11 @@ Lists all games that have been registered by the current user.
 
 ## To-Do List
 ### Features
-- Add connectivity to an existing video game database such as [RAWG.io](https://rawg.io/)
+- Address edge cases for messages with text over the character limit.
 ### Technical
 - Add project unit tests
 - Add SQL Database
-- Standardize string inputs
-  - Make letters either uppercase or lowercase
-  - Trim all whitespace with a single '-'
-  - Remove trailing whitespace.
+- Add Docker Test Environment
 
 ## Credits
 Project code for index and deploy-commands was extended from the [DiscordJS guide](https://discordjs.guide/slash-commands/response-methods.html#ephemeral-responses)

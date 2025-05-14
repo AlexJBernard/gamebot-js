@@ -23,14 +23,23 @@ module.exports = {
      */
   async execute(interaction) {
     const game = interaction.options.getString("game");
-    const id = interaction.member.user.id
-    const currentUserData = database.getUser(id)
-    let response = `ERROR: ${game} not found in user's game list`;
 
-    if (currentUserData.hasGame(game)) {
-      currentUserData.removeGame(game)
-      database.saveUser(currentUserData)
-      response = `Game ${game} removed!`
+    const nameTrimmed = game.trim().toLowerCase()
+    const regex = new RegExp("\\S+", "g")
+    const regexResult = nameTrimmed.match(regex)
+
+    if (regexResult) {
+      const id = interaction.member.user.id
+      const currentUserData = database.getUser(id)
+      let response = `ERROR: GAME, **${regexResult}** NOT FOUND IN YOUR GAME LIST`;
+
+      if (currentUserData.hasGame(regexResult)) {
+        currentUserData.removeGame(regexResult)
+        database.saveUser(currentUserData)
+        response = `Game **${regexResult}** removed!`
+      }
+    } else {
+      response `ERROR: INVALID INPUT.`
     }
 
     await interaction.reply({

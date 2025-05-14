@@ -34,7 +34,6 @@ const getUserList = () => {
       return new User(user.userId, user.username, user.games)
     }
   )
-  console.log(userData)
 
   return userData;
 }

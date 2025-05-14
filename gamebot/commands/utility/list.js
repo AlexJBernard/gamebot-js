@@ -22,11 +22,17 @@ module.exports = {
     const user = interaction.options.getUser("user") ?? interaction.member.user;
     const userData = database.getUser(user.id)
 
-    let response = "ERROR: User not registered";
+    let response = "**ERROR:** User not registered";
 
     if (userData) {
-      response = user.username + "\n"
-      response += userData.games.toString()
+      if (userData.games.length == 0) {
+        response = "**ERROR:** USER IS LIKE PS3...\n\nno games."
+      } else {
+        response = `## ${user.username}'s Games`
+        userData.games.forEach(game => {
+          response += `\n*${game}*`
+        })
+      }
     }
 
     await interaction.reply({

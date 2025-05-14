@@ -36,9 +36,8 @@ class User {
     if (this.hasGame(game)) {
       return false
     }
-    
-    const newList = [...this.games, game]
-    this.games = newList
+
+    this.games = [...this.games, game].sort((a, b) => a.localeCompare(b))
     return true
   }
 

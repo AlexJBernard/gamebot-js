@@ -23,24 +23,29 @@ module.exports = {
    */
   async execute(interaction) {
     const game = interaction.options.getString("game");
+    let response = `ERROR: INVALID INPUT`
 
     // Correct user input 
     // Trim lead and trailing whitespaces
     // Set all characters to lowercase
     // Replace each string of spaces with a single '-'
-    const gameCorrected = game.trim().toLowerCase()
-    
-    const { id, username } = interaction.member.user;
-    const currentUserData = database.getUser(id)
-    // If the current user is not recorded, create a new userData object
-    const userData = currentUserData ? currentUserData : new User(id, username, [])
-    console.log(userData)
+    const nameTrimmed = game.trim().toLowerCase()
+    const regex = new RegExp("\\S+", "g")
+    const regexResult = nameTrimmed.match(regex)
+    if (regexResult) {
+      const gameName = regexResult.join('_')
+      const { id, username} = interaction.member.user;
+      const currentUserData = database.getUser(id)
 
-    let response = `ERROR: User already possess game ${game}`
-    if (!userData.hasGame(game)) {
-      userData.addGame(game)
-      database.saveUser(userData)
-      response = 'Game Successfully Added!'
+      const userData = currentUserData ? currentUserData : new User(id, username, [])
+
+      response = `ERROR: User already possesses game **${gameName}**`
+
+      if (!userData.hasGame(gameName)) {
+        userData.addGame(gameName)
+        database.saveUser(userData)
+        response = `### ${gameName}\n was added to your collection.`
+      }
     }
 
     await interaction.reply({

@@ -23,11 +23,11 @@ module.exports = {
     const num = interaction.options.getInteger('games') ?? 5;
 
     const list = database.topGames(num)
-    let response = "ERROR: NO REGISTERED GAMES"
+    let response = "**ERROR:** NO REGISTERED GAMES"
 
     if (list.length > 0) {
-      response = "MOST OWNED GAMES:"
-      list.forEach(game => response += '\n' + game.name + '\n\tUsers: ' + game.num)
+      response = "# MOST OWNED GAMES:"
+      list.forEach(game => response += `\n**${game.name}**\n\tUsers: ${game.num}`)
     }
 
     await interaction.reply({
